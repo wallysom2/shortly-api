@@ -9,6 +9,7 @@ const router = Router();
 
 router.post("/signup", validateSchema (userSchema), registerUser);
 router.post("/signin", validateSchema (loginSchema), login);
+
 router.post ("/urls/shorten", validateSchema(urlSchema), validateToken, shortenUrl);
 router.get ("/urls/:id", getURLById);
 router.delete ("/urls/:id", validateToken, deleteURL);

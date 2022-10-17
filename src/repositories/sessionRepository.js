@@ -8,9 +8,17 @@ async function createSession (user, token) {
 
 }
 
+async function getSession (token) {
+
+    const session = await db.query ("SELECT * FROM sessions WHERE token = $1", [token]);
+
+    return session;
+
+}
 
 const sessionRepo = {
-    createSession
+    createSession,
+    getSession
 }
 
 export default sessionRepo;

@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
 export async function registerUser(req, res) {
 const newUser = req.body;
 try {
-    const emailResult = await userRepo.getUser(newUser.email);
+    const emailResult = await userRepo.getUserByEmail(newUser.email);
     if (emailResult.rowCount > 0) {
         return res.status(409)
     }
@@ -27,7 +27,7 @@ error ? res.status(422).json({error: error.details[0].message}) : res.status(200
 export async function login(req, res) {
     const {email, password} = req.body;
     try {
-        const {rows: users} = await userRepo.getUser(email);
+        const {rows: users} = await userRepo.getUserByEmail(email);
         const [user] = users;
         if (!user) {
             return res.status(401);
