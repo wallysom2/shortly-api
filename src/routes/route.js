@@ -8,5 +8,10 @@ const router = Router();
 
 router.post("/signup", validateSchema (userSchema), registerUser);
 router.post("/signin", validateSchema (loginSchema), login);
+router.post ("/urls/shorten", validateSchema(urlSchema), validateToken, shortenURL);
+router.get ("/urls/:id", getURLById);
+router.delete ("/urls/:id", validateToken, deleteURL);
+router.get ("urls/open/:shortURL", openShortUrl);
+
 
 export default router;
