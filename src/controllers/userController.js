@@ -7,7 +7,7 @@ export async function createUser(req, res) {
   try {
     const existingUsers = usersRepository.getUserByEmail(user.email)
     if (existingUsers.rowCount > 0) {
-      return res.sendStatus(409); 
+      return res.sendStatus(409)
     }
 
     const {name, email, password} = user;
@@ -26,7 +26,7 @@ export async function getRanking(req, res) {
     res.send(result.rows);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(500);
+    return res.sendStatus(500)
   }
 }
 
