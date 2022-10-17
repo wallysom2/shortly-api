@@ -1,30 +1,30 @@
-import sessionRepo from "../repositories/sessionRepository";
+import sessionRepository from "../repositories/sessionsRepository.js";
+import usersRepository from "../repositories/usersRepository.js";
 
+export async function validateToken(req, res, next) {
+  const authorization = req.headers.authorization;
+  const token = authorization?.replace("Bearer ", "");
+  if (!token) {
+    return res.send(401).status("No token."); // unauthorized
+  }
 
-export async function validateToken (req, res, next) {
-const authorization = req.headers.authorization;
-const token = authorization?.replace("Bearer ", "");
-if (!token) {
-    return res.sendStatus(401).json({error: "Token não encontrado"});
-}
-try {
-    const {rows: sessions} = await sessionRepo.getSession(token);
+  try {
+    const { rows:sessions } = await sessionRepository.getSessionByToken(token);
     const [session] = sessions;
     if (!session) {
-        return res.sendStatus(401)
+      return res.send(401).send("Session not found."); // unauthorized
     }
 
-  const {rows : users} = await userRepo.getUserById(session.user_id);
+    const { rows: users } = await usersRepository.getUserById(session.userId);
     const [user] = users;
     if (!user) {
-        return res.sendStatus(401)
+      return res.send(401).send("User not found."); // unauthorized
     }
-
+  
     res.locals.user = user;
     next();
-    
-} catch (error) {
+  } catch (error) {
     console.log(error);
-    res.sendStatus(500);
-}
+    return res.sendStatus(500); // server error
+  }  
 }
